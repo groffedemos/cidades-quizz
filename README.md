@@ -28,6 +28,12 @@ Abra `index.html` em um navegador moderno.
 2. Clique em **Ver resultado**.
 3. Consulte a quantidade de acertos ou clique em **Fazer o quiz novamente** para reiniciar.
 
+## Tema
+
+O botão **Ativar modo escuro**, no cabeçalho, alterna entre os temas claro e escuro. O
+modo claro é o padrão na primeira visita; a preferência escolhida é salva no navegador
+e preservada ao reiniciar o quiz ou abrir a página novamente.
+
 ## Publicação
 
 Os pushes para a branch `main` acionam o workflow do GitHub Actions que publica o site no GitHub Pages. Também é possível executar o deploy manualmente pela aba **Actions**, selecionando o workflow **Deploy static site to Pages** e clicando em **Run workflow**.
