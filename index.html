@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Quiz com perguntas sobre capitais de países ao redor do mundo."
+    />
+    <title>Cidades Quiz</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, sans-serif;
+        color: #172033;
+        background: #edf3fb;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1rem;
+      }
+
+      main {
+        width: min(100%, 760px);
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 12px 32px rgb(23 32 51 / 15%);
+        overflow: hidden;
+      }
+
+      header {
+        padding: 2rem;
+        color: #ffffff;
+        background: linear-gradient(135deg, #0c4a6e, #2563eb);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+      }
+
+      header p {
+        margin: 0.75rem 0 0;
+      }
+
+      form,
+      #result {
+        padding: 2rem;
+      }
+
+      fieldset {
+        margin: 0 0 1.5rem;
+        padding: 1.25rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+      }
+
+      legend {
+        padding: 0 0.35rem;
+        font-weight: 700;
+      }
+
+      label {
+        display: block;
+        margin-top: 0.75rem;
+        cursor: pointer;
+      }
+
+      input {
+        margin-right: 0.5rem;
+      }
+
+      button {
+        border: 0;
+        border-radius: 8px;
+        padding: 0.8rem 1.2rem;
+        font: inherit;
+        font-weight: 700;
+        color: #ffffff;
+        background: #2563eb;
+        cursor: pointer;
+      }
+
+      button:hover,
+      button:focus-visible {
+        background: #1d4ed8;
+      }
+
+      #message {
+        min-height: 1.5rem;
+        margin: 0 0 1rem;
+        color: #b91c1c;
+        font-weight: 700;
+      }
+
+      #result {
+        text-align: center;
+      }
+
+      #result p {
+        font-size: 1.2rem;
+      }
+
+      [hidden] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Cidades Quiz</h1>
+        <p>Teste seus conhecimentos sobre capitais ao redor do globo.</p>
+      </header>
+
+      <form id="quiz" novalidate>
+        <p id="message" role="alert" aria-live="polite"></p>
+
+        <fieldset>
+          <legend>1. Qual é a capital do Japão?</legend>
+          <label><input type="radio" name="q1" value="a" /> Kyoto</label>
+          <label><input type="radio" name="q1" value="b" /> Tóquio</label>
+          <label><input type="radio" name="q1" value="c" /> Osaka</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>2. Qual é a capital do Canadá?</legend>
+          <label><input type="radio" name="q2" value="a" /> Toronto</label>
+          <label><input type="radio" name="q2" value="b" /> Vancouver</label>
+          <label><input type="radio" name="q2" value="c" /> Ottawa</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>3. Qual é a capital da Austrália?</legend>
+          <label><input type="radio" name="q3" value="a" /> Sydney</label>
+          <label><input type="radio" name="q3" value="b" /> Canberra</label>
+          <label><input type="radio" name="q3" value="c" /> Melbourne</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>4. Qual é a capital do Egito?</legend>
+          <label><input type="radio" name="q4" value="a" /> Alexandria</label>
+          <label><input type="radio" name="q4" value="b" /> Gizé</label>
+          <label><input type="radio" name="q4" value="c" /> Cairo</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>5. Qual é a capital da Argentina?</legend>
+          <label><input type="radio" name="q5" value="a" /> Buenos Aires</label>
+          <label><input type="radio" name="q5" value="b" /> Córdoba</label>
+          <label><input type="radio" name="q5" value="c" /> Rosário</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>6. Qual é a capital do Quênia?</legend>
+          <label><input type="radio" name="q6" value="a" /> Mombasa</label>
+          <label><input type="radio" name="q6" value="b" /> Nairóbi</label>
+          <label><input type="radio" name="q6" value="c" /> Kisumu</label>
+        </fieldset>
+
+        <button type="submit">Ver resultado</button>
+      </form>
+
+      <section id="result" hidden aria-live="polite">
+        <h2>Resultado</h2>
+        <p id="score"></p>
+        <button id="restart" type="button">Fazer o quiz novamente</button>
+      </section>
+    </main>
+
+    <script>
+      const correctAnswers = {
+        q1: "b",
+        q2: "c",
+        q3: "b",
+        q4: "c",
+        q5: "a",
+        q6: "b",
+      };
+
+      const quiz = document.querySelector("#quiz");
+      const result = document.querySelector("#result");
+      const score = document.querySelector("#score");
+      const message = document.querySelector("#message");
+      const restart = document.querySelector("#restart");
+
+      quiz.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const answers = new FormData(quiz);
+        const unanswered = Object.keys(correctAnswers).filter(
+          (question) => !answers.has(question),
+        );
+
+        if (unanswered.length > 0) {
+          message.textContent = "Responda todas as perguntas antes de continuar.";
+          return;
+        }
+
+        const total = Object.entries(correctAnswers).reduce(
+          (points, [question, answer]) =>
+            points + (answers.get(question) === answer ? 1 : 0),
+          0,
+        );
+
+        message.textContent = "";
+        score.textContent = `Você acertou ${total} de ${Object.keys(correctAnswers).length} perguntas.`;
+        quiz.hidden = true;
+        result.hidden = false;
+      });
+
+      restart.addEventListener("click", () => {
+        quiz.reset();
+        result.hidden = true;
+        quiz.hidden = false;
+        message.textContent = "";
+        quiz.querySelector("input").focus();
+      });
+    </script>
+  </body>
+</html>
